@@ -1,0 +1,91 @@
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath "org.wildfly.swarm:wildfly-swarm-plugin:1.0.0.Final"
+    }
+}
+apply from: 'http://plugins.jasoft.fi/vaadin.plugin'
+apply plugin: 'wildfly-swarm'
+apply plugin: 'war'
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+
+sourceCompatibility = 1.8
+group = "com.example"
+version = "1.0"
+[compileJava, compileTestJava, javadoc]*.options*.encoding = 'UTF-8'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven {
+        url 'http://repository.jboss.org/nexus/content/groups/public'
+    }
+}
+
+ext {
+    VAADIN_VERSION = '7.6.8'
+    SWARM_VERSION = '1.0.0.Final'
+}
+
+swarm {
+    mainClassName = 'com.example.Main'
+}
+
+vaadin {
+    version VAADIN_VERSION
+    debug false
+    widgetset 'com.example.MyWidgetset'
+    gwt{
+        userAgent 'ie10,gecko1_8,safari'
+    }
+}
+
+dependencies {
+    compile group: 'com.vaadin', name: 'vaadin-cdi', version: '1.0.3'
+    compile group: 'com.vaadin', name: 'vaadin-themes', version: VAADIN_VERSION
+
+    compile group: 'org.wildfly.swarm', name: 'undertow', version: SWARM_VERSION
+    compile group: 'org.wildfly.swarm', name: 'cdi', version: SWARM_VERSION
+
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.14.1'
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+}
+
+eclipse {
+    classpath {
+        downloadSources = true
+        downloadJavadoc = true
+    }
+}
+
+idea {
+    module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
