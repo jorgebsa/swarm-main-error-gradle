@@ -6,7 +6,7 @@ This is an example project of an issue related to running a wildfly-swarm projec
 Running this project by the generated swarm.jar, it behaves as expected. However, running from the IDE results
 in the application not being deployed.
 
-This issue is probably related to https://issues.jboss.org/browse/SWARM-542
+This issue is probably related to [this known issue](https://issues.jboss.org/browse/SWARM-542) and has the related discussion in this [post](https://groups.google.com/forum/#!topic/wildfly-swarm/cR8vf1Jzbt8)
 
 ### Running via jar
 
@@ -18,7 +18,7 @@ java -jar build/libs/swarm-main-error-gradle-swarm.jar
 ### Running via IntelliJ
 
 Run the main method from com.example.MyMain class. Gradle does not populate the local M2REPO, so the first time 
-this project is run, you might need to use the following properties, as described in https://issues.jboss.org/browse/SWARM-542:
+this project is run, you might need to use the following properties, as described in [this known issue](https://issues.jboss.org/browse/SWARM-542):
 
 ```
 -Dremote.maven.repo=https://repository.jboss.org/nexus/content/groups/m2-proxy/,https://repository.jboss.org/nexus/content/groups/public/"
